@@ -40,13 +40,13 @@ If you have mongoDB installed, to serve it locally (in Windows) just run:
 Warning regarding tests
 =======================
 
-To be able to run tests, we need a mongoDB server to connect to (I know of no better way. If there is, please let me know). The tests are written asumming that a local server is running, building a client that connects to it, creates testing databases/collections, fills them, accesses information stored, and wipe them all in the end.
+To be able to run tests, we need a mongoDB server to connect to (I know of no better way. If there is, please let me know). The tests are written assuming that a local server is running, building a client that connects to it, creates testing databases/collections, fills them, accesses information stored, and wipe them all in the end.
 
 
 Usage Example
 =============
 
-The example below asummes that a local mongoDB server is running (thus the IP 127.0.0.1) and in the default 27017 port.
+The example below assumes that a local mongoDB server is running (thus the IP 127.0.0.1) and in the default 27017 port.
 
 .. code:: python
 
@@ -84,6 +84,14 @@ The example below asummes that a local mongoDB server is running (thus the IP 12
 
     # Delete all entries
     ms.clear()
+
+
+    
+Collaboration
+=============
+
+This is a tiny project, with a minimal functionality covered. Nevertheless, you may wish to improve or add features,
+in that case feel free to contact me at <zeycus@gmail.com>.
 
 
 
