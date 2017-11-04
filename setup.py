@@ -12,7 +12,7 @@ setup(name='mongo_shelve',
       description='Persistent dictionaries based on mongoDB',
       long_description=readme(),
       classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.5',
         'Topic :: Database',
