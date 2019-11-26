@@ -48,11 +48,26 @@ class Mongo_shelve(object):
         """
         output = self.col.find_one({self.keyField: key})
         if output is None:
-            raise KeyError("Key '%s' not found in mongoDB database." % key)
+            raise KeyError("Key '%s' not found in mongoDB database '%s'." % (key, self.name))
         else:
             del output[self.keyField]
             del output['_id']
             return output
+
+    def getClosest(self, key, criteria=None):
+        """Inexact look-up method.
+
+        Returns a pair (key_found, dict) with the information in the associated document,
+        in the closest key as given by criteria.
+
+        :param key: value to be searched in the self.keyField.
+        :rtype: dict
+
+        """
+        if criteria is None:  # Default: key is that value or lower.
+            criteria = lambda seq: max(e for e in seq if e <= key)
+        key_found = criteria(self.keys())
+        return key_found, self[key_found]
 
     def __setitem__(self, key, value):
         """Associating information to a key.
@@ -79,6 +94,16 @@ class Mongo_shelve(object):
         if result.deleted_count != 1:
             raise KeyError("No document with key '%s' could be deleted." % key)
 
+    def discard(self, key):
+        """Removal of information associated to a particular key.
+
+        No fail if not present.
+        """
+        try:
+            del self[key]
+        except KeyError:
+            pass
+
     def __contains__(self, key):
         """Check whether there is information associated to a particular key.
 
@@ -95,18 +120,22 @@ class Mongo_shelve(object):
 
         :rtype: int
         """
-        return self.col.count()
+        return self.col.count_documents({})
 
     def __iter__(self):
         """Iterator over the values of the look-up field."""
         yield from self.keys()
 
     def __repr__(self):
-        return "<%s.%s (%s)>" % (self.col.database.name, self.col.name, self.keyField)
+        return "<%s.%s[%s])>" % (self.col.database.name, self.col.name, self.keyField)
+
+    @property
+    def name(self):
+        return self.col.name
 
     def keys(self):
         """Iterator over keys of the look-up field."""
-        for data in self.col.find():
+        for data in self.col.find(projection=[self.keyField]):
             yield data[self.keyField]
 
     def items(self):
